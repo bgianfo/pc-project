@@ -7,21 +7,21 @@ EX = java
 CC = javac -Xlint:all
 PJ = ../pj.jar:.
 
-TARGET = PrimeTesterSmp
-
 default: class
 
 run: class
-	$(EX) -cp $(PJ) $(TARGET)
+	$(EX) -cp $(PJ) Matrix
+	$(EX) -cp $(PJ) MatrixOp
+	$(EX) -cp $(PJ) MatrixParallelOp
 
 class: clean *.java
 	$(CC) -cp $(PJ) *.java
    
 zip: bundle
-
 bundle:
-	zip hw1.zip hw1-1.txt hw1-2.txt ElementaryCASeq.java ElementaryCASmp.java hw1-3.txt
+	zip matrix.zip *.java Makefile
+
 clean:
-	rm -rf *.class
-	rm -rf *.zip
+	@rm -rf *.class
+	@rm -rf *.zip
 
