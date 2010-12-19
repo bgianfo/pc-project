@@ -1,0 +1,176 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{dependencies/acm_proc_article-sp}
+
+\usepackage{url}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+  language=C++,             % choose the language of the code
+  basicstyle=\small,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+  stepnumber=0,                   % the step between two line-numbers. If it is 1 each line will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  %frame=single,                   % adds a frame around the code
+  tabsize=2,              % sets default tabsize to 2 spaces
+  captionpos=t,                   % sets the caption-position to bottom
+  breaklines=false,        % sets automatic line breaking
+  breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+  escapeinside={\%}{)}          % if you want to add a comment within your code
+}
+
+
+\begin{document}
+
+\title{ Development Of Parallel Matrix Operations }
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{3} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+Nicholas Dexter \\
+       \affaddr{RIT}\\
+       \email{nxd3734@rit.edu}
+% 2nd. author
+\alignauthor
+Brian Gianforcaro \\
+       \affaddr{RIT}\\
+       \email{bjg1955@rit.edu}
+% 3rd. author
+\alignauthor
+Jerome Marhic \\
+       \affaddr{RIT}\\
+       \email{jxm2644@rit.edu}
+}
+\maketitle
+\begin{abstract}
+%the formatting guidelines for ACM SIG Proceedings.
+%It complements the document \textit{Author's Guide to Preparing
+%ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and Bib\TeX}. This
+%source file has been written with the intention of being
+%compiled under \LaTeX$2_\epsilon$\ and BibTeX.
+%
+%The developers have tried to include every imaginable sort
+%of ``bells and whistles", such as a subtitle, footnotes on
+%title, subtitle and authors, as well as in the text, and
+%every optional component (e.g. Acknowledgments, Additional
+%Authors, Appendices), not to mention examples of
+%equations, theorems, tables and figures.
+%
+%To make best use of this sample document, run it through \LaTeX\
+%and BibTeX, and compare this source code with the printed
+%output produced by the dvi file.
+\end{abstract}
+u
+%% A category with the (minimum) three required fields
+\category{H.4}{Information Systems Applications}{Miscellaneous}
+%%%A category including the fourth, optional field follows...
+%
+%\terms{Theory}
+
+\keywords{ MongoDB, NoSQL, RIT, Database System Implementation, XPath, GeoSpatial Search, Building Index's in Parallel} % NOT required for Proceedings
+%
+%\footnotetext[1]{NoSQL databases, also known as structured storage are known for not requiring a fixed table schema and often avoid join operations. The thing that
+% links them together is there use of alternate query languages from SQL.}
+
+\section{Introduction}
+\section{}
+\subsection{}
+\subsection{Inserting Records Into The Database}
+
+\subsection{Key Values And Insertion Into Indexes}
+\subsection{Page Fetching}
+\subsection{Query Processing And Optimizations}
+\subsection{Building Indexes In Parallel}
+\subsection{XPath Like Queries Of Documents}
+\subsection{Expanding Geo-spatial Search}
+\subsection{User Authentication}
+\newpage
+
+\newpage
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{bibliography}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+\balancecolumns
+% That's all folks!
+\end{document}
