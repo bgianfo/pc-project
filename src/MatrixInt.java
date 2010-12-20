@@ -16,7 +16,7 @@ public class MatrixInt {
    * @param rows How many rows in the matrix
    * @param cols How many columns in the matrix
    */
-  public MatrixInt( int rows, int cols ) {
+  public MatrixInt( final int rows, final int cols ) {
     this.rows = rows;
     this.cols = cols;
 
@@ -39,7 +39,7 @@ public class MatrixInt {
   /**
    * Matrix copy constructor
    */
-  private MatrixInt( MatrixInt copy ) { 
+  private MatrixInt( final MatrixInt copy ) { 
     this( copy.data );
   }
 
@@ -70,7 +70,7 @@ public class MatrixInt {
    * @param col The number of columns in the matrix
    * @return The new random Integer Matrix
    */
-  public static MatrixInt random( int row, int col ) {
+  public static MatrixInt random( final int row, final int col ) {
     MatrixInt rand = new MatrixInt( row, col ); 
     Random prng = new Random();
     
@@ -90,7 +90,7 @@ public class MatrixInt {
    * @param col The number of columns in the matrix
    * @return The new random Integer Matrix
    */
-  public static MatrixInt randomSmall( int row, int col ) {
+  public static MatrixInt randomSmall( final int row, final int col ) {
     int REDUCTION = 10000000;
     MatrixInt rand = MatrixInt.random( row, col );
     for ( int r = 0; r < rand.rows(); r++ ) {
@@ -99,6 +99,14 @@ public class MatrixInt {
       }
     }
     return rand;
+  }
+
+  /** Determine if two matricies are dimensionally equal */
+  public boolean equalDim( final MatrixInt x ) {
+    return x.rows() == rows() && x.cols() == cols();
+  }
+  public boolean equalDim( final MatrixDouble x ) {
+    return x.rows() == rows() && x.cols() == cols();
   }
 
 

@@ -172,15 +172,42 @@ public class MatrixOp {
     return output;
   }
 
+  /**
+   * Multiply a integer matrix by a integer matrix.
+   * 
+   * @param a The integer value to multiply the matrix by
+   * @param a The other integer value to multiply the matrix by
+   * @return The resulting matrix
+   */
+  public static MatrixInt mult( MatrixInt a, MatrixInt b ) {
+
+    if ( ! a.equalDim( b ) ) {
+      throw new RuntimeException("Multiplication of different sized matricies");
+    }
+
+    MatrixInt output = new MatrixInt(a.rows(), a.cols());
+
+    for (int r = 0; r < output.rows(); r++) {
+      for (int c = 0; c < output.cols(); c++) {
+        for (int k = 0; k < a.cols(); k++) {
+          output.data[r][c] += (a.data[r][k] * b.data[k][c]);
+        }
+      }
+    }
+    return output;
+  }
+
+
   public static void main( String args[] ) {
 
-    MatrixInt A = new MatrixInt( 10000, 10000 );
+    MatrixInt A = MatrixInt.random( 900, 900 );
+    MatrixInt B = MatrixInt.random( 900, 900 );
 
     int loop = 20;
     long start = System.currentTimeMillis();
     for (int i = 0; i < loop; i++ ) {
       long lstart = System.currentTimeMillis();
-      A = MatrixOp.mult( A, 2 );
+      MatrixInt C = MatrixOp.mult( A, B );
       System.out.println( "Running time = " +
                         (System.currentTimeMillis()-lstart) + " msec" );
     }
