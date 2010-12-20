@@ -1,12 +1,21 @@
 
 import java.util.Random;
 
+/**
+ * A integer based matrix
+ */
 public class MatrixInt {
 
   private final int rows;
   private final int cols;
-  public final int[][] data;
+  public int[][] data;
 
+  /**
+   * Integer Matrix constructor for an new empty object.
+   *
+   * @param rows How many rows in the matrix
+   * @param cols How many columns in the matrix
+   */
   public MatrixInt( int rows, int cols ) {
     this.rows = rows;
     this.cols = cols;
@@ -14,6 +23,11 @@ public class MatrixInt {
     data = new int[rows][cols];
   }
 
+  /**
+   * Data copy constructor
+   *
+   * @param cdata The data to copy
+   */
   public MatrixInt( int[][] cdata ) {
     this.rows = cdata.length;
     this.cols = cdata[0].length;
@@ -22,14 +36,25 @@ public class MatrixInt {
     this.copyData( cdata );
   }
 
+  /**
+   * Matrix copy constructor
+   */
   private MatrixInt( MatrixInt copy ) { 
     this( copy.data );
   }
 
+  /** Get the number of rows in the matrix */
   public int rows() { return rows; }
 
+  /** Get the number of columns of in the matrix */
   public int cols() { return cols; }
 
+  /** 
+   * Copy the data from a given array into 
+   * the matrix own allocated data.
+   *
+   * @param cdata The multidemensional array to copy from
+   */
   private void copyData( int[][] cdata ) {
     for ( int r = 0; r < rows ; r++ ) {
       for ( int c = 0; c < cols; c++ ) {
@@ -38,11 +63,16 @@ public class MatrixInt {
     }
   }
 
+  /**
+   * Generates a new matrix of the specified size, filled with random data.
+   *
+   * @param row The number of rows in the matrix
+   * @param col The number of columns in the matrix
+   * @return The new random Integer Matrix
+   */
   public static MatrixInt random( int row, int col ) {
-
     MatrixInt rand = new MatrixInt( row, col ); 
-
-    Random prng = new Random( 1000 );
+    Random prng = new Random();
     
     for ( int r = 0; r < rand.rows(); r++ ) {
       for ( int c = 0; c < rand.cols(); c++ ) {
@@ -53,8 +83,48 @@ public class MatrixInt {
     return rand;
   }
 
+  /**
+   * Generates a new matrix of the specified size, filled with random data.
+   *
+   * @param row The number of rows in the matrix
+   * @param col The number of columns in the matrix
+   * @return The new random Integer Matrix
+   */
+  public static MatrixInt randomSmall( int row, int col ) {
+    int REDUCTION = 10000000;
+    MatrixInt rand = MatrixInt.random( row, col );
+    for ( int r = 0; r < rand.rows(); r++ ) {
+      for ( int c = 0; c < rand.cols(); c++ ) {
+        rand.data[r][c] = Math.abs(rand.data[r][c]/REDUCTION);
+      }
+    }
+    return rand;
+  }
+
+
+  /**
+   * Member function to display the current matrix on the command line.
+   */
   public void display() {
 
+    System.out.println( "Dimensions: " + rows() + " X " + cols() );
+    for ( int r = 0; r < rows(); r++ ) {
+      for ( int c = 0; c < cols(); c++ ) {
+        System.out.print( data[r][c] + " " );
+      }
+      System.out.println();
+    }
+  }
+
+  /** Tester main argument */
+  public static void main( String args[] ) {
+    //MatrixInt test = MatrixInt.random(40, 40);
+    MatrixInt test = new MatrixInt(50, 50);
+    test.display();
+    System.out.println("\n\n");
+
+    MatrixInt r = MatrixInt.randomSmall( 20, 20 );
+    r.display();
   }
   
 }
