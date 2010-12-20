@@ -53,6 +53,11 @@ public class MatrixDouble {
   }
 
   public void display() {
-
+    for ( int r = 0; r < rows(); r++ ) {
+      for ( int c = 0; c < cols(); c++ ) {
+        System.out.printf( "%.2f ", data[r][c] );
+      }
+      System.out.println();
+    }
   }
 }
