@@ -105,16 +105,16 @@ public class MatrixInt {
   public boolean equalDim( final MatrixInt x ) {
     return x.rows() == rows() && x.cols() == cols();
   }
+
+  /** Determine if two matricies are dimensionally equal */
   public boolean equalDim( final MatrixDouble x ) {
     return x.rows() == rows() && x.cols() == cols();
   }
-
 
   /**
    * Member function to display the current matrix on the command line.
    */
   public void display() {
-
     System.out.println( "Dimensions: " + rows() + " X " + cols() );
     for ( int r = 0; r < rows(); r++ ) {
       for ( int c = 0; c < cols(); c++ ) {

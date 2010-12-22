@@ -172,6 +172,35 @@ public class MatrixOp {
     return output;
   }
 
+  public static MatrixDouble mult( MatrixInt b, MatrixDouble a ) {
+    return mult( a, b );
+  }
+
+  /**
+   * Multiply a integer matrix by a integer matrix.
+   * 
+   * @param a The integer value to multiply the matrix by
+   * @param a The other integer value to multiply the matrix by
+   * @return The resulting matrix
+   */
+  public static MatrixDouble mult( MatrixDouble a, MatrixInt b ) {
+
+    if ( ! a.equalDim( b ) ) {
+      throw new RuntimeException("Multiplication of different sized matricies");
+    }
+
+    MatrixDouble output = new MatrixDouble(a.rows(), a.cols());
+
+    for (int r = 0; r < output.rows(); r++) {
+      for (int c = 0; c < output.cols(); c++) {
+        for (int k = 0; k < a.cols(); k++) {
+          output.data[r][c] += (a.data[r][k] * b.data[k][c]);
+        }
+      }
+    }
+    return output;
+  }
+
   /**
    * Multiply a integer matrix by a integer matrix.
    * 

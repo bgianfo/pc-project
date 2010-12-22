@@ -12,7 +12,6 @@ public class MatrixDouble {
    * @param rows How many rows in the matrix
    * @param cols How many columns in the matrix
    */
-
   public MatrixDouble( int rows, int cols ) {
     this.rows = rows;
     this.cols = cols;
@@ -68,17 +67,13 @@ public class MatrixDouble {
    * @return The new random Integer Matrix
    */
   public static MatrixDouble random( int row, int col ) {
-
     MatrixDouble rand = new MatrixDouble( row, col ); 
-
     Random prng = new Random( 1000 );
-    
     for ( int r = 0; r < rand.rows(); r++ ) {
       for ( int c = 0; c < rand.cols(); c++ ) {
         rand.data[r][c] = prng.nextDouble();
       }
     }
-
     return rand;
   }
 
@@ -100,11 +95,12 @@ public class MatrixDouble {
     return rand;
   }
 
-
   /** Determine if two matricies are dimensionally equal */
   public boolean equalDim( MatrixInt x ) {
     return x.rows() == rows() && x.cols() == cols();
   }
+
+  /** Determine if two matricies are dimensionally equal */
   public boolean equalDim( MatrixDouble x ) {
     return x.rows() == rows() && x.cols() == cols();
   }
@@ -113,11 +109,21 @@ public class MatrixDouble {
    * Member function to display the current matrix on the command line.
    */
   public void display() {
+    System.out.println( "Dimensions: " + rows() + " X " + cols() );
     for ( int r = 0; r < rows(); r++ ) {
       for ( int c = 0; c < cols(); c++ ) {
         System.out.printf( "%.2f ", data[r][c] );
       }
       System.out.println();
     }
+  }
+
+  /** Tester main argument */
+  public static void main( String args[] ) {
+    MatrixDouble test = new MatrixDouble(50, 50);
+    test.display();
+    System.out.println("\n\n");
+    MatrixDouble r = MatrixDouble.randomSmall( 20, 20 );
+    r.display();
   }
 }
