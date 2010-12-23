@@ -7,7 +7,7 @@ import edu.rit.pj.IntegerForLoop;
 
 
 /**
- * Serial Matrix Operation Wrappers
+ * Parallel Matrix Operation Wrappers
  */
 public class MatrixParallelOp {
 
