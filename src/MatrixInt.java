@@ -43,6 +43,22 @@ public class MatrixInt {
     this( copy.data );
   }
 
+  
+  /** return the identity matrix
+   * @param size the size of a side of a matrix (identity->square matrix)
+   * @return the identity matrix of size (sixe*sixe)
+   */
+  public static MatrixInt getIdentity(int size)
+  {
+	  int[][] data = new int[size][size];
+	  // should be initialized at 0 by default
+	  for(int i=0; i<size; i++)
+		  data[i][i] = 1;
+	  
+	  MatrixInt m = new MatrixInt(data);
+	  return m;
+  }
+  
   /** Get the number of rows in the matrix */
   public int rows() { return rows; }
 
@@ -111,6 +127,28 @@ public class MatrixInt {
     return x.rows() == rows() && x.cols() == cols();
   }
 
+  
+  /** determine whether the dimension of the 2 matrices allows us to perform a matrix multiplication 
+   * @param this the left matrix
+   * @param b the right matrix
+   * @return true if the dimension match
+   */
+  public boolean correctDim( MatrixDouble b)
+  {
+	  return this.cols() == b.rows();
+  }
+  
+  /** determine whether the dimension of the 2 matrices allows us to perform a matrix multiplication 
+   * @param this the left matrix
+   * @param b the right matrix
+   * @return true if the dimension match
+   */
+  public boolean correctDim( MatrixInt b)
+  {
+	  return this.cols() == b.rows();
+  }
+  
+  
   /**
    * Member function to display the current matrix on the command line.
    */

@@ -185,11 +185,11 @@ public class MatrixOp {
    */
   public static MatrixDouble mult( MatrixDouble a, MatrixInt b ) {
 
-    if ( ! a.equalDim( b ) ) {
+    if ( ! a.correctDim( b ) ) {
       throw new RuntimeException("Multiplication of different sized matricies");
     }
 
-    MatrixDouble output = new MatrixDouble(a.rows(), a.cols());
+    MatrixDouble output = new MatrixDouble(a.rows(), b.cols());
 
     for (int r = 0; r < output.rows(); r++) {
       for (int c = 0; c < output.cols(); c++) {
@@ -210,11 +210,11 @@ public class MatrixOp {
    */
   public static MatrixInt mult( MatrixInt a, MatrixInt b ) {
 
-    if ( ! a.equalDim( b ) ) {
+    if ( ! a.correctDim( b ) ) {
       throw new RuntimeException("Multiplication of different sized matricies");
     }
 
-    MatrixInt output = new MatrixInt(a.rows(), a.cols());
+    MatrixInt output = new MatrixInt(a.rows(), b.cols());
 
     for (int r = 0; r < output.rows(); r++) {
       for (int c = 0; c < output.cols(); c++) {

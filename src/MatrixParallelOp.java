@@ -20,11 +20,11 @@ public class MatrixParallelOp {
    */
   public static MatrixInt mult( final MatrixInt a, final MatrixInt b ) throws Exception {
 
-    if ( ! a.equalDim( b ) ) {
+    if ( ! a.correctDim( b ) ) {
       throw new RuntimeException("Multiplication of different sized matricies");
     }
 
-    final MatrixInt output = new MatrixInt(a.rows(), a.cols());
+    final MatrixInt output = new MatrixInt(a.rows(), b.cols());
 
     new ParallelTeam().execute( new ParallelRegion() {
       public void run() throws Exception {
@@ -45,6 +45,39 @@ public class MatrixParallelOp {
     return output;
   }
 
+  /**
+   * Multiply a double matrix by a double matrix.
+   * 
+   * @param a The double left matrix
+   * @param a The double right matrix
+   * @return The resulting matrix
+   */
+  public static MatrixDouble mult( final MatrixDouble a, final MatrixDouble b ) throws Exception {
+
+    if ( ! a.correctDim( b ) ) {
+      throw new RuntimeException("Multiplication of different sized matricies");
+    }
+
+    final MatrixDouble output = new MatrixDouble(a.rows(), b.cols());
+
+    new ParallelTeam().execute( new ParallelRegion() {
+      public void run() throws Exception {
+        execute( 0, output.rows()-1, new IntegerForLoop() {
+          public void run( int first, int last ) {
+            for ( int r = first; r <= last; r++ ) {
+              for (int c = 0; c < output.cols(); c++) {
+                for (int k = 0; k < a.cols(); k++) {
+                  output.data[r][c] += (a.data[r][k] * b.data[k][c]);
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+
+    return output;
+  }
   public static MatrixDouble mult( final MatrixDouble b, final MatrixInt a ) throws Exception {
     return mult( a, b );
   }
@@ -58,11 +91,11 @@ public class MatrixParallelOp {
    */
   public static MatrixDouble mult( final MatrixInt a, final MatrixDouble b ) throws Exception {
 
-    if ( ! a.equalDim( b ) ) {
+    if ( ! a.correctDim( b ) ) {
       throw new RuntimeException("Multiplication of different sized matricies");
     }
 
-    final MatrixDouble output = new MatrixDouble(a.rows(), a.cols());
+    final MatrixDouble output = new MatrixDouble(a.rows(), b.cols());
 
     new ParallelTeam().execute( new ParallelRegion() {
       public void run() throws Exception {
@@ -85,11 +118,19 @@ public class MatrixParallelOp {
 
 
   public static void main( String args[] ) throws Exception {
-
+	  
+	  
     // Initialize parallel infrastructure
     Comm.init( args );
-
-    MatrixInt A = MatrixInt.random( 900, 900 );
+    		
+    	MatrixDouble A = MatrixDouble.getIdentity(10);
+    	A.display();
+    	MatrixDouble B = MatrixDouble.random(10, 4);
+    	B.display();
+    	MatrixDouble C = MatrixParallelOp.mult(A,B);
+    	C.display();
+    	
+/*    MatrixInt A = MatrixInt.random( 900, 900 );
     MatrixInt B = MatrixInt.random( 900, 900 );
 
     int loop = 20;
@@ -102,7 +143,7 @@ public class MatrixParallelOp {
     }
     System.out.println( "Avg time = " +
                         (System.currentTimeMillis()-start)/loop + " msec" );
-
+*/
   }
 
 }
