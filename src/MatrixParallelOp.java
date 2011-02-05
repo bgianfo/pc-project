@@ -117,6 +117,41 @@ public class MatrixParallelOp {
   }
 
 
+  /**
+   * Multiply a integer matrix by a integer vector.
+   *
+   * @param a The integer matrix
+   * @param b The integer vector
+   * @return The resulting matrix
+   */
+  public static MatrixInt mult( final MatrixInt a, final VectorInt b ) throws Exception {
+
+    if ( ! (a.cols() == b.length()) ) {
+      throw new RuntimeException("Multiplication of different sized matricie & vector");
+    }
+
+    final MatrixInt output = new MatrixInt(a.rows(), 1);
+
+    new ParallelTeam().execute( new ParallelRegion() {
+      public void run() throws Exception {
+        execute( 0, a.rows()-1, new IntegerForLoop() {
+          public void run( int first, int last ) {
+            for ( int r = first; r <= last; r++ ) {
+              int sum = 0;
+              for (int c = 0 ; c < a.cols(); c++) {
+                sum += (a.data[r][c] * b.data[c]);
+              }
+              output.data[r][0] = sum;
+            }
+          }
+        });
+      }
+    });
+
+    return output;
+  }
+
+
   public static void main( String args[] ) throws Exception {
     // Initialize parallel infrastructure
     Comm.init( args );
