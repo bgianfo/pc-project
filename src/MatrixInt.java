@@ -35,6 +35,8 @@ public class MatrixInt {
     data = new int[rows][cols];
     this.copyData( cdata );
   }
+  
+  
 
   /**
    * Matrix copy constructor
@@ -42,7 +44,7 @@ public class MatrixInt {
   private MatrixInt( final MatrixInt copy ) { 
     this( copy.data );
   }
-
+       
   
   /** return the identity matrix
    * @param size the size of a side of a matrix (identity->square matrix)
@@ -53,7 +55,7 @@ public class MatrixInt {
 	  int[][] data = new int[size][size];
 	  // should be initialized at 0 by default
 	  for(int i=0; i<size; i++)
-		  data[i][i] = 1;
+		  data[i][i] = 1; 
 	  
 	  MatrixInt m = new MatrixInt(data);
 	  return m;

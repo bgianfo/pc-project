@@ -123,27 +123,36 @@ public class MatrixParallelOp {
     // Initialize parallel infrastructure
     Comm.init( args );
     		
-    	MatrixDouble A = MatrixDouble.getIdentity(10);
-    	A.display();
-    	MatrixDouble B = MatrixDouble.random(10, 4);
-    	B.display();
-    	MatrixDouble C = MatrixParallelOp.mult(A,B);
-    	C.display();
-    	
-/*    MatrixInt A = MatrixInt.random( 900, 900 );
-    MatrixInt B = MatrixInt.random( 900, 900 );
+    MatrixInt A = MatrixInt.random(1000,1000);
 
-    int loop = 20;
+    //A.display();
+    MatrixInt B = MatrixInt.random(1000,1000);
+    //B.display();
+    long t0 = System.currentTimeMillis();
+
+    MatrixInt C = MatrixOp.StrassenMult(A, B);
+
+    long t1 = System.currentTimeMillis();
+
+    MatrixInt Cprime = MatrixOp.mult(A,B);
+
+    long t2 = System.currentTimeMillis();
+
+    System.out.println("strassen = "+(t1-t0));
+    System.out.println("classic = "+(t2-t1));
+    
+
     long start = System.currentTimeMillis();
+    int loop = 1;
     for (int i = 0; i < loop; i++ ) {
       long lstart = System.currentTimeMillis();
-      MatrixInt C = MatrixParallelOp.mult( A, B );
-      System.out.println( "Running time = " +
+      MatrixInt Cprime2 = MatrixParallelOp.mult( A, B );
+      System.out.println( "parallel Running time = " +
                         (System.currentTimeMillis()-lstart) + " msec" );
     }
-    System.out.println( "Avg time = " +
+    System.out.println( "parallel Avg time = " +
                         (System.currentTimeMillis()-start)/loop + " msec" );
-*/
+
   }
 
 }
