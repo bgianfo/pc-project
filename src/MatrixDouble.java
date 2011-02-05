@@ -75,6 +75,20 @@ public class MatrixDouble {
   }
 
   /**
+   * Generate a identity matrix of type double 
+   * @param row The number of rows in the matrix
+   * @param col The number of columns in the matrix
+   * @return The new identity matrix
+   */
+  public static MatrixDouble identity( final int row, final int col ) {
+    MatrixDouble ident = new MatrixDouble( row, col );
+    for ( int i = 0; i < row && i < col; i++ ) {
+        ident.data[i][i] = 1;
+    }
+    return ident;
+  }
+
+  /**
    * Generates a new matrix of the specified size, filled with random data.
    *
    * @param row The number of rows in the matrix
