@@ -240,7 +240,7 @@ public class MatrixOp {
    */
   public static MatrixInt mult( MatrixInt a, VectorInt b ) {
 
-    if ( ! a.cols() == b.length() ) {
+    if ( ! (a.cols() == b.length()) ) {
       throw new RuntimeException("Multiplication of different sized matricie & vector");
     }
 
@@ -286,7 +286,7 @@ public class MatrixOp {
    * @return The resulting matrix
    */
   public static MatrixDouble mult( MatrixInt a, VectorDouble b ) {
-    if ( ! a.cols() == b.length() ) {
+    if ( ! (a.cols() == b.length()) ) {
       throw new RuntimeException("Multiplication of different sized matricie & vector");
     }
     MatrixDouble output = new MatrixDouble( a.rows(), 1 );
@@ -300,31 +300,6 @@ public class MatrixOp {
     }
     return output;
   }
-
-  /**
-   * Multiply a integer matrix by a integer vector.
-   *
-   * @param a The integer matrix
-   * @param b The integer vector
-   * @return The resulting integer matrix
-   */
-  public static MatrixDouble mult( MatrixInt a, VectorDouble b ) {
-
-    if ( ! a.cols() == b.length() ) {
-      throw new RuntimeException("Multiplication of different sized matricie & vector");
-    }
-
-    MatrixInt output = new MatrixInt( a.rows(), 1 );
-    for (int r = 0; r < a.rows(); r++) {
-      int sum = 0;
-      for (int c = 0 ; c < a.cols(); c++) {
-        sum += (a.data[r][c] * b.data[c]);
-      }
-      output.data[r][0] = sum;
-    }
-    return output;
-  }
-
 
   public static void main( String args[] ) {
 
