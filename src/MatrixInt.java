@@ -79,6 +79,21 @@ public class MatrixInt {
     }
   }
 
+
+  /**
+   * Generate a identity matrix of type int.
+   * @param row The number of rows in the matrix
+   * @param col The number of columns in the matrix
+   * @return The new identity matrix
+   */
+  public static MatrixInt identity( final int row, final int col ) {
+    MatrixInt ident = new MatrixInt( row, col );
+    for ( int i = 0; i < row && i < col; i++ ) {
+        ident.data[i][i] = 1;
+    }
+    return ident;
+  }
+
   /**
    * Generates a new matrix of the specified size, filled with random data.
    *
@@ -127,7 +142,6 @@ public class MatrixInt {
     return x.rows() == rows() && x.cols() == cols();
   }
 
-  
   /** determine whether the dimension of the 2 matrices allows us to perform a matrix multiplication 
    * @param this the left matrix
    * @param b the right matrix
@@ -147,8 +161,7 @@ public class MatrixInt {
   {
 	  return this.cols() == b.rows();
   }
-  
-  
+
   /**
    * Member function to display the current matrix on the command line.
    */

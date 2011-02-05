@@ -118,8 +118,6 @@ public class MatrixParallelOp {
 
 
   public static void main( String args[] ) throws Exception {
-	  
-	  
     // Initialize parallel infrastructure
     Comm.init( args );
     		
