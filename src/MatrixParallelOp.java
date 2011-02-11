@@ -11,6 +11,8 @@ import edu.rit.pj.IntegerForLoop;
  */
 public class MatrixParallelOp {
 
+  static ParallelTeam team = new ParallelTeam();
+
   /**
    * Multiply a integer matrix by a integer matrix.
    * 
@@ -26,7 +28,7 @@ public class MatrixParallelOp {
 
     final MatrixInt output = new MatrixInt(a.rows(), b.cols());
 
-    new ParallelTeam().execute( new ParallelRegion() {
+    team.execute( new ParallelRegion() {
       public void run() throws Exception {
         execute( 0, output.rows()-1, new IntegerForLoop() {
           public void run( int first, int last ) {
@@ -60,7 +62,7 @@ public class MatrixParallelOp {
 
     final MatrixDouble output = new MatrixDouble(a.rows(), b.cols());
 
-    new ParallelTeam().execute( new ParallelRegion() {
+    team.execute( new ParallelRegion() {
       public void run() throws Exception {
         execute( 0, output.rows()-1, new IntegerForLoop() {
           public void run( int first, int last ) {
@@ -97,7 +99,7 @@ public class MatrixParallelOp {
 
     final MatrixDouble output = new MatrixDouble(a.rows(), b.cols());
 
-    new ParallelTeam().execute( new ParallelRegion() {
+    team.execute( new ParallelRegion() {
       public void run() throws Exception {
         execute( 0, output.rows()-1, new IntegerForLoop() {
           public void run( int first, int last ) {
@@ -116,7 +118,6 @@ public class MatrixParallelOp {
     return output;
   }
 
-
   /**
    * Multiply a integer matrix by a integer vector.
    *
@@ -132,7 +133,7 @@ public class MatrixParallelOp {
 
     final MatrixInt output = new MatrixInt(a.rows(), 1);
 
-    new ParallelTeam().execute( new ParallelRegion() {
+    team.execute( new ParallelRegion() {
       public void run() throws Exception {
         execute( 0, a.rows()-1, new IntegerForLoop() {
           public void run( int first, int last ) {
@@ -155,7 +156,7 @@ public class MatrixParallelOp {
   public static void main( String args[] ) throws Exception {
     // Initialize parallel infrastructure
     Comm.init( args );
-    		
+		
     MatrixInt A = MatrixInt.random(1000,1000);
 
     //A.display();
@@ -163,7 +164,7 @@ public class MatrixParallelOp {
     //B.display();
     long t0 = System.currentTimeMillis();
 
-    MatrixInt C = MatrixOp.StrassenMult(A, B);
+    MatrixInt C = MatrixOp.strassenMult(A, B);
 
     long t1 = System.currentTimeMillis();
 
@@ -173,7 +174,15 @@ public class MatrixParallelOp {
 
     System.out.println("strassen = "+(t1-t0));
     System.out.println("classic = "+(t2-t1));
-    
+
+    long t3 = System.currentTimeMillis();
+
+    MatrixInt C2prime = MatrixParallelOp.strassenMult(A,B);
+
+    long t4 = System.currentTimeMillis();
+    System.out.println("parallel strassen = "+(t3-t4));
+
+
 
     long start = System.currentTimeMillis();
     int loop = 1;

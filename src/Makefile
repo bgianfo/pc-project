@@ -22,6 +22,7 @@ bundle:
 	zip matrix.zip *.java Makefile
 
 clean:
+	@clear
 	@rm -rf *.class
 	@rm -rf *.zip
 
