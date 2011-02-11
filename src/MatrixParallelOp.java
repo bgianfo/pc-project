@@ -175,15 +175,6 @@ public class MatrixParallelOp {
     System.out.println("strassen = "+(t1-t0));
     System.out.println("classic = "+(t2-t1));
 
-    long t3 = System.currentTimeMillis();
-
-    MatrixInt C2prime = MatrixParallelOp.strassenMult(A,B);
-
-    long t4 = System.currentTimeMillis();
-    System.out.println("parallel strassen = "+(t3-t4));
-
-
-
     long start = System.currentTimeMillis();
     int loop = 1;
     for (int i = 0; i < loop; i++ ) {
