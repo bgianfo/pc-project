@@ -1,13 +1,21 @@
+import edu.rit.pj.Comm;
+import edu.rit.pj.ParallelRegion;
+import edu.rit.pj.ParallelTeam;
+import edu.rit.pj.IntegerForLoop;
+
 /**
  * A program that applies Gaussian eliminati n t  compute
  * the inverse that solves the system Ax=b
  */
 public class MatrixInverseSmp{
 
+    static ParallelTeam team = new ParallelTeam();
     private static final double eps = 1e-10;
 
     // prevent construction
     private MatrixInverseSmp() { }
+
+
 
     /**
      * Solves the linear system A.x=b
@@ -15,33 +23,9 @@ public class MatrixInverseSmp{
      * @param   b    the RHS
      * @return  x    the solution
      */
-    public static VectorDouble solve(MatrixDouble A, VectorDouble b) throws Exception {
-        // Row echelon form of A
-        MatrixDouble REA = eliminate(A);
-        // solution vector
-        VectorDouble x = new VectorDouble(b.length());
-        // set all x_i to 0
-        x.zero();
-
-        int N = b.length();
-        // perform backsubstitution
-        for (int i = N - 1; i >= 0; i--) {
-            // initialize sum to 0
-            double sum = 0.0;
-            for (int j = i + 1; j < N; j++) {
-                sum += REA.data[i][j] * x.data[j];
-            }
-            x.data[i] = (b.data[i] - sum) / REA.data[i][i];
-        }
-        return x;
-    }
-
-    /** 
-     * apply gaussian elimination to the matrix a
-     */
-    public static MatrixDouble eliminate(MatrixDouble A) throws Exception {
+    public static VectorDouble solve(final MatrixDouble A, final VectorDouble b) throws Exception {
         // Determine the number of rows of A
-        int N = A.rows();
+        final int N = A.rows();
 
         // Iterate through all of the rows
         for(int pivot = 0; pivot < N; pivot++) {
@@ -71,15 +55,98 @@ public class MatrixInverseSmp{
                        " solution via Gaussian Elimination");
             }
 
-            // Set leading coefficient to 1 and perform elementary row op
-            for (int i = pivot + 1; i < N; i++) {
-                // Determine the factor to reduce leading coeff to 1
-                double alpha = A.data[i][pivot] / A.data[pivot][pivot];
-                for (int j = pivot; j < N; j++) {
-                    // Reduce the row to match the operation
-                    A.data[i][j] = A.data[i][j] - alpha * A.data[pivot][j];
+
+            final int p = pivot;
+
+            // Execute parallel row operations
+            team.execute( new ParallelRegion() {
+                public void run() throws Exception {
+                    execute( p + 1, N-1, new IntegerForLoop() {
+                        public void run(int first, int last) {
+                            for(int i = first; i <= last; i++) {
+                                double alpha = A.data[i][p] / A.data[p][p];
+                                b.data[i] -= alpha * b.data[p];
+                                for (int j = p; j < N; j++) {
+                                    A.data[i][j] = A.data[i][j] - alpha * A.data[p][j];
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // solution vector
+        VectorDouble x = new VectorDouble(b.length());
+        // set all x_i to 0
+        x.zero();
+
+        // perform backsubstitution
+        for (int i = N - 1; i >= 0; i--) {
+            // initialize sum to 0
+            double sum = 0.0;
+            for (int j = i + 1; j < N; j++) {
+                sum += A.data[i][j] * x.data[j];
+            }
+            x.data[i] = (b.data[i] - sum) / A.data[i][i];
+        }
+        return x;
+    }
+
+    /** 
+     * apply gaussian elimination to the matrix a
+     */
+    public static MatrixDouble eliminate(final MatrixDouble A) throws Exception {
+        // Determine the number of rows of A
+        final int N = A.rows();
+
+        // Iterate through all of the rows
+        for(int pivot = 0; pivot < N; pivot++) {
+
+            // Initialize the maximum to the first row out of the remaining 
+            // N-pivot rows
+            int max = pivot;
+            // Iterate through the remaining rows
+            for(int i = pivot + 1; i < N; i++) {
+                // If the absolute value of this row is greater than the last max
+                if(Math.abs(A.data[i][pivot]) > Math.abs(A.data[max][pivot])) {
+                    // update the new maximum
+                    max = i;
                 }
             }
+            // Holder for the pivot row
+            double[] holder = A.data[pivot]; 
+            // Swap the old max row with the pivot row
+            A.data[pivot] = A.data[max]; 
+            // Swap the pivot row into the old max row
+            A.data[max] = holder;
+
+            // If the leading coefficient is close to 0
+            if (Math.abs(A.data[pivot][pivot]) <= eps) {
+                // Exception because matrix may be singular
+                throw new RuntimeException("Matrix incapable of inverse" +
+                       " solution via Gaussian Elimination");
+            }
+
+            ParallelTeam team = new ParallelTeam();
+
+            final int p = pivot;
+
+            // Execute parallel row operations
+            team.execute( new ParallelRegion() {
+                public void run() throws Exception {
+                    execute( p + 1, N-1, new IntegerForLoop() {
+                        public void run(int first, int last) {
+                            for(int i = first; i <= last; i++) {
+                                double alpha = A.data[i][p] / A.data[p][p];
+                                for (int j = p; j < N; j++) {
+                                    A.data[i][j] = A.data[i][j] - alpha * A.data[p][j];
+                                }
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         return A;
