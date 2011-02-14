@@ -29,7 +29,7 @@ public class Tester {
         System.out.println( "Strassen ("+N+") = "+(end-start));
     }
 
-    private void runPTest( int N ) {
+    private void runPTest( int N ) throws Exception {
 
         MatrixInt A = MatrixInt.random(N,N);
         MatrixInt B = MatrixInt.random(N,N);
@@ -42,7 +42,7 @@ public class Tester {
         System.out.println( "Parallel ("+N+") = "+(end-start));
     }
 
-    private void runPStraTest( int N ) {
+    private void runPStraTest( int N ) throws Exception {
 
         MatrixInt A = MatrixInt.random(N,N);
         MatrixInt B = MatrixInt.random(N,N);
