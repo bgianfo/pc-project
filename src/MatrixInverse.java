@@ -1,3 +1,5 @@
+import edu.rit.pj.Comm;
+
 /**
  * A program that applies Gaussian eliminati n t  compute
  * the inverse that solves the system Ax=b
@@ -124,6 +126,9 @@ public class MatrixInverse{
      * main method for testing the inversion
      */
     public static void main(String args[]) throws Exception {
+
+        Comm.init(args);
+
         /*
         double[][] data = new double[3][3];
         data[0][0] = 2; data[0][1] = 1; data[0][2] = 1;
