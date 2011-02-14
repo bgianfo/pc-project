@@ -156,11 +156,21 @@ public class MatrixParallelOp {
   public static void main( String args[] ) throws Exception {
     // Initialize parallel infrastructure
     Comm.init( args );
-		
-    MatrixInt A = MatrixInt.random(1000,1000);
+    
+    int nbcolsa = Integer.decode( args[0] );
+    System.out.println(nbcolsa  + " cols");
+    int nbrowsa = Integer.decode( args[1] );
+    System.out.println(nbrowsa  + " rows");
+
+    int nbcolsb = Integer.decode( args[2] );
+    System.out.println(nbcolsb  + " cols");
+    int nbrowsb = Integer.decode( args[3] );
+    System.out.println(nbrowsb  + " rows");
+
+    MatrixInt A = MatrixInt.random(	nbcolsa,nbrowsa);
 
     //A.display();
-    MatrixInt B = MatrixInt.random(1000,1000);
+    MatrixInt B = MatrixInt.random(nbcolsb,nbrowsb);
     //B.display();
     long t0 = System.currentTimeMillis();
 
@@ -174,6 +184,18 @@ public class MatrixParallelOp {
 
     System.out.println("strassen = "+(t1-t0));
     System.out.println("classic = "+(t2-t1));
+    
+    // check that the matrices are equal :
+    for( int i=0; i< C.rows(); i++ )
+    {
+    	for( int j=0; j<C.cols(); j++ )
+    	{
+    		if( C.data[i][j] != Cprime.data[i][j] )
+    		{
+    			System.out.println("error");
+    		}
+    	}
+    }
 
     long start = System.currentTimeMillis();
     int loop = 1;
