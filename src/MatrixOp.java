@@ -280,7 +280,7 @@ public class MatrixOp {
    */
   public static MatrixInt pad( MatrixInt a, int nbrows, int nbcols ) 
   {
-	System.out.println("resizing from "+a.rows()+","+a.cols()+" to " +nbrows+ ","+nbcols);
+	//System.out.println("resizing from "+a.rows()+","+a.cols()+" to " +nbrows+ ","+nbcols);
     int[][] data = new int[nbrows][nbcols];
     for(int i = 0; i < a.rows(); i++ ) {
       for(int j = 0; j < a.cols(); j++ ) {
@@ -316,7 +316,7 @@ public class MatrixOp {
 
     if ( a.equalDim(b)  && isPow2(rows) ) 
     {
-        System.out.println("no need to pad");
+        //System.out.println("no need to pad");
     	result =  strassenMultRun(a, b);
 
     }
