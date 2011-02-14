@@ -129,31 +129,153 @@ Jerome Marhic \\
 %To make best use of this sample document, run it through \LaTeX\
 %and BibTeX, and compare this source code with the printed
 %output produced by the dvi file.
+
+A Parallel Matrix Manipulation Library (PMML) is presented for use on sequential and symmetric multiprocessing (SMP) systems. PMML is written using the Parallel Java library developed by Professor Alan Kaminsky at the Rochester Institute of Technology. PMML provides methods for the following operations: matrix-vector multiplication, matrix-matrix multiplication, and matrix inversion and solution to the linear system $A x=b$. An implementation of the Strassen algorithm for efficient matrix multiplication is provided for use sequentially and on SMP systems. Gaussian elimination with partial-pivoting is used to find the row-reduced form of the matrix $A$ and backsubstitution is used to solve the linear system. Algorithms for sequential solution and parallel solution on SMP systems are provided. Performance metrics are presented to compare the {\em speedup} and {\em sizeup} gained in the parallel over the sequential versions.
 \end{abstract}
-u
+
 %% A category with the (minimum) three required fields
-\category{H.4}{Information Systems Applications}{Miscellaneous}
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
 %%%A category including the fourth, optional field follows...
 %
 %\terms{Theory}
 
-\keywords{ MongoDB, NoSQL, RIT, Database System Implementation, XPath, GeoSpatial Search, Building Index's in Parallel} % NOT required for Proceedings
+\keywords{ Parallel Matrix Manipulation Library, PMML, Parallel Java, PJ, Strassen algorithm, Gaussian elimination, RIT } % NOT required for Proceedings
 %
 %\footnotetext[1]{NoSQL databases, also known as structured storage are known for not requiring a fixed table schema and often avoid join operations. The thing that
 % links them together is there use of alternate query languages from SQL.}
 
 \section{Introduction}
-\section{}
-\subsection{}
-\subsection{Inserting Records Into The Database}
+\subsection{Numerical Linear Algebra}
 
-\subsection{Key Values And Insertion Into Indexes}
-\subsection{Page Fetching}
-\subsection{Query Processing And Optimizations}
-\subsection{Building Indexes In Parallel}
-\subsection{XPath Like Queries Of Documents}
-\subsection{Expanding Geo-spatial Search}
-\subsection{User Authentication}
+The use of computers to manipulate and solve matrices has found many applications in computer science, finances, engineering, biology, and physics. Since many problems can be reduced to a system of linear equations, particularly in the solution of differential equations, numerical linear algebra has become increasingly useful in the study of such systems. In the High Performance Computing world, a large amount of effort has been devoted to developing toolsets that allow these problems to be solved in parallel.
+
+Since its development in 1979, the {\em de facto} standard for basic linear algebra operations has been the Basic Linear Algebra Subprograms (BLAS) \cite{BLAS}. Most modern implementations of numerical linear algebra libraries still rely on this toolset written in FORTRAN90 \cite{LAPACK}, though other language implementations exist \cite{CLAPACK,JBLAS}. Early in the applications of computers to such problems, vector computers reigned supreme in numerical linear algebra due to their ability to apply operations to one-dimensional arrays of data. As scalar processors became cheaper and more readily available, a trend began of using large systems of scalar processors to perform parallel operations.
+
+\subsection{Parallel Matrix Operations}
+
+Mention Parallel Java Library and need for Matrix Manipulation methods.
+
+\section{Methods}
+\subsection{Matrix-Vector Multiplication}
+
+Describe the problem of matrix-vector multiplication and introduce the terms.
+
+\subsection{Matrix-Matrix Multiplication}
+
+\subsubsection{Classic matrix multiplication}
+The following code:
+\begin{verbatim}
+Matrix C = MatrixOp.mult(A,B)
+Matrix C = MatrixParallelOp.mult(A,B)
+\end{verbatim}
+returns the product $C=AB$, using respectively the sequential and parallel algorithms.
+
+Note that the operation is valid only if the number of columns of $A$ equals the number of rows of $B$, otherwise an Exception is thrown.
+
+The matrix multiplication is performed by multiplying each row of $A$ by each column of $B$ \cite{MatrixMultiplication}. Sequentially, one thread performs all the operations by looping on every rows of $A$ and every columns of $B$. The complexity is in $O(m\cdot p\cdot n)$ if $A$ and $B$ are rectangular matrices of size $m\cdot p$ and $p\cdot n$ respectively. This method is easily parallelizable over several threads; each thread computing a range of rows of $A$. The complexity is then $O( \frac{m}{K}\cdot p\cdot n )$, $K$ being the number of threads used.
+
+\subsubsection{Strassen matrix multiplication}
+The following code:
+\begin{verbatim}
+Matrix C = MatrixOp.strassenMult(A,B)
+Matrix C = MatrixParallelStr.mult(A,B)
+\end{verbatim}
+returns the product $C=AB$, using respectively the sequential and parallel versions of the Strassen algorithms.
+
+There is a way of multiplying two $2\times2$ matrices using only 7 multiplications instead of 8 with the classic algorithm. The Strassen algorithm takes advantage of that to multiply two matrices with a complexity of $O(n^2.807)$, providing that those matrices have the same size and are square matrices with side of size a power of 2 \cite{StrassenAlgorithm}.
+The idea consists in recursively dividing both matrices into 4 smaller square matrices, until those submatrices degenerate into numbers, that is have a size of 1, and replace the last multiplication by the sum of 18 submatrices.
+
+However, by padding with zeroes the matrices to the closest power of 2, we can multiply matrices of any size. 
+
+Due to this recursive nature, this algorithm is not easily parallelizable but we managed to parallelize the first step before the recursion to obtain speedups with up to 7 threads (see results section).
+
+\subsection{Solution to Linear Systems of Equations}
+
+Describe the solution to the linear system $Ax=b$ and backsubstitution. Describe Gaussian elimination with partial-pivoting.
+
+\section{Results}
+\subsection{Matrix-Vector Multiplication}
+
+\begin{center}
+\begin{tabular}{|r|r|r|r|r|r|r|}\hline
+{\em n} & {\em K} & {\em T (msec)} & {\em Speedup} & {\em Eff} & {\em EDSF} \\\hline
+1000    & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+1000    & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+1000    & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+500     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+500     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+100     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+100     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+\end{tabular}
+\end{center}
+
+\subsection{Matrix-Matrix Multiplication}
+
+\begin{center}
+\begin{tabular}{|r|r|r|r|r|r|r|}\hline
+{\em n} & {\em K} & {\em T (msec)} & {\em Speedup} & {\em Eff} & {\em EDSF} \\\hline
+1000    & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+1000    & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+1000    & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+500     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+500     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+100     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+100     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+\end{tabular}
+\end{center}
+
+\subsection{Gaussian Elimination and Solution}
+
+\begin{center}
+\begin{tabular}{|r|r|r|r|r|r|r|}\hline
+{\em n} & {\em K} & {\em T (msec)} & {\em Speedup} & {\em Eff} & {\em EDSF} \\\hline
+1000    & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+1000    & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+1000    & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+1000    & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+500     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+500     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+500     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & seq     & 0000000        &   xxx         & xxx       & xxx        \\\hline
+100     & 1       & 0000000        & 0.0000        & 0.0000    & xxx        \\\hline
+100     & 2       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 4       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 8       & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+100     & 16      & 0000000        & 0.0000        & 0.0000    & 0.0000     \\\hline
+\end{tabular}
+\end{center}
+
+\section{Conclusions}
+
+While we did blah, blah, blah and blah, blah, we recognize that blah is blah. For further development, we would need to implement blah blah blah. However, with regard to the library in its current state, we are satisfied with blah and would like to continue to blah.
+
 \newpage
 
 \newpage
