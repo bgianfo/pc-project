@@ -19,11 +19,19 @@ class: *.java
    
 
 test: class
-#	$(EX) -Xmx3g -Dpj.nt=1 Tester
+	$(EX) -Xmx3g -Dpj.nt=1 Tester
 	$(EX) -Xmx3g -Dpj.nt=2 Tester
 	$(EX) -Xmx3g -Dpj.nt=4 Tester
 	$(EX) -Xmx3g -Dpj.nt=7 Tester
 	$(EX) -Xmx3g -Dpj.nt=8 Tester
+
+test-inversion: class
+	$(EX) -Xmx3g -Dpj.nt=1 TesterInverse
+	$(EX) -Xmx3g -Dpj.nt=2 TesterInverse
+	$(EX) -Xmx3g -Dpj.nt=4 TesterInverse
+	$(EX) -Xmx3g -Dpj.nt=7 TesterInverse
+	$(EX) -Xmx3g -Dpj.nt=8 TesterInverse
+
 
 zip: bundle
 bundle:
