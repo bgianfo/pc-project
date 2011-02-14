@@ -74,17 +74,17 @@ public class Tester {
         //runTest( 500 );
         //runTest( 1000 );
 
-        //runStraTest( 100 );
-        //runStraTest( 500 );
-        //runStraTest( 1000 );
+        runStraTest( 100 );
+        runStraTest( 500 );
+        runStraTest( 1000 );
 
-        runPTest( 100 );
-        runPTest( 500 );
-        runPTest( 1000 );
+        //runPTest( 100 );
+        //runPTest( 500 );
+        //runPTest( 1000 );
 
-        runPStraTest( 100 );
-        runPStraTest( 500 );
-        runPStraTest( 1000 );
+        //runPStraTest( 100 );
+        //runPStraTest( 500 );
+        //runPStraTest( 1000 );
     }
 
 }

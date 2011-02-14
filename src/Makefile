@@ -32,6 +32,15 @@ test-inversion: class
 	$(EX) -Xmx3g -Dpj.nt=7 TesterInverse
 	$(EX) -Xmx3g -Dpj.nt=8 TesterInverse
 
+test-vector: class
+	$(EX) -Xmx3g -Dpj.nt=1 TesterVector
+	$(EX) -Xmx3g -Dpj.nt=2 TesterVector
+	$(EX) -Xmx3g -Dpj.nt=4 TesterVector
+	$(EX) -Xmx3g -Dpj.nt=7 TesterVector
+	$(EX) -Xmx3g -Dpj.nt=8 TesterVector
+
+
+
 
 zip: bundle
 bundle:
