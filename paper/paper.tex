@@ -293,7 +293,7 @@ with the eventual JIT-enabled timings.
 1000    & 4       &  34        & 0.647       & 0.162   & 0.631     \\\hline
 1000    & 8       &  35        & 0.629       & 0.079   & 0.708     \\\hline
 2000    & seq     &  83        & xxxxx       & xxxxx   & xxxxx     \\\hline
-2000    & 1       &  90        & 0.922       & 0.922   & xxxxx    \\\hline
+2000    & 1       &  90        & 0.922       & 0.922   & xxxxx     \\\hline
 2000    & 2       &  35        & 2.371       & 1.186   & -0.222    \\\hline
 2000    & 4       &  14        & 5.929       & 1.482   & -0.126    \\\hline
 2000    & 8       &   9        & 9.222       & 1.153   & -0.029    \\\hline
@@ -318,6 +318,17 @@ with the eventual JIT-enabled timings.
 \includegraphics[scale=0.5]{images/matrix-vector/eff-vs-proc.png}
 \end{center}
 
+As shown above, the parallel matrix-vector multiplication's report super
+linear speedup's for large matrices and accompanying vectors. It should be
+noted that larger N's were used in testing these algorithms vs the results
+that follow. This was merely because this algorithm is far less memory and
+computationally intensive. The run times with a smaller N were so small that
+it was hard to discern if a speedup was occurring in some cases. It is possible,
+as seen in the other results through out this paper, that the poor performance
+for the smaller 1000 by 1000 matrix multiplied by a vector of length 1000 is
+caused by the overhead associated with Parallel Java. The time it takes to
+actually compute the result is shorter than the time it takes to initialize
+and dispatch the threads from Parallel Java.
 
 \subsection{Matrix-Matrix Multiplication}
 
@@ -360,12 +371,12 @@ with the eventual JIT-enabled timings.
 \includegraphics[scale=0.5]{images/parallel/eff-vs-proc.png}
 \end{center}
 The results report strong parallel speedup especially as our matrix 
-size increases. The speedup for the $1000 X 1000$ matrix multiplication reports
-near linear speedup, and a efficiency of $1.0$ exactly. The particularly poor performance
+size increases. The speedup for the 1000 by 1000 matrix multiplication reports
+near linear speedup, and a efficiency of 1.0 exactly. The particularly poor performance
 for small matrices can potentially be traced back to the slight over head
 that comes with starting and executing a Parallel Java team. It is possible that the time taken during
 the initial dispatch of the threads in the parallel implementation is greater
-than any possible speed up achieved by using them for small matrices. 
+than any possible speed up achieved by using them for small matrices.
 
 
 \subsubsection{Sequential \& Parallel Strassen Implementation}
@@ -415,7 +426,8 @@ First of all, for matrices smaller than size of 128 by 128 both of the
 Strassen implementations default back to the regular sequential matrix
 multiplication. During testing it was discovered that the regular sequential
 algorithm is faster for this special case. This is why the results show no
-speedup for 100 by 100 matrix. It should also be noted that in our parallel
+speedup for 100 by 100 matrix, and the first data point for the  100 by 100
+matrix has such a extremely high efficiency. It should also be noted that in our parallel
 Strassen implementation the maximum number of steps which can parallelized is
 seven. As shown in the results above, when moving to eight parallel threads
 very little speedup is achieved. The Strassen algorithms are also specially
@@ -466,6 +478,16 @@ running time for the sequential and parallel Strassen algorithms.
 \includegraphics[scale=0.5]{images/matrix-inversion/eff-vs-proc.png}
 \end{center}
 
+These results are quite interesting in many ways. As observed in all of the
+previous results, we see a increasing level of speedup as our problem size
+increases. With the largest N performing the best, with a linear
+speed up initially and slowly dropping in performance, until a drastic
+crash in performance can be observed with running eight threads. This could
+possibly be the final thread phenomenan discussed in class, where the
+performance of the algorithm is reduced when the number of threads is equal
+to the number of processors available. It would be interesting to continue
+testing larger N's and seeing if the effect is more drastic the larger the N
+as that appears to be what is happening with the relatively small data set.
 \section{Conclusions}
 
 While we did blah, blah, blah and blah, blah, we recognize that blah is blah. For further development, we would need to implement blah blah blah. However, with regard to the library in its current state, we are satisfied with blah and would like to continue to blah.

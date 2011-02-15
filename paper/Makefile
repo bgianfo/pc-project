@@ -9,7 +9,8 @@ open:
 
 paper: paper.tex
 	$(LATEX) paper
-	#$(BIBTEX) paper
+	$(BIBTEX) paper
+	$(BIBTEX) paper
 	$(LATEX) paper
 	#$(CONVERT_DVI) paper.dvi
 	open paper.pdf
