@@ -431,9 +431,11 @@ Strassen implementations default back to the regular sequential matrix
 multiplication. During testing it was discovered that the regular sequential
 algorithm is faster for this special case. This is why the results show no
 speedup for 100 by 100 matrix, and the first data point for the  100 by 100
-matrix has such a extremely high efficiency. It should also be noted that in our parallel
-Strassen implementation the maximum number of steps which can parallelized is
-seven. As shown in the results above, when moving to eight parallel threads
+matrix has such a extremely high efficiency. It should also be noted that in 
+our parallel Strassen implementation the maximum number of steps which can 
+parallelized is seven. 
+
+As shown in the results above, when moving to eight parallel threads
 very little speedup is achieved. The Strassen algorithms are also specially
 designed to operate on matrices which are of a size which is a power of two.
 In order to take advantage of this for ever matrix, if the matrix is not a
@@ -492,6 +494,16 @@ performance of the algorithm is reduced when the number of threads is equal
 to the number of processors available. It would be interesting to continue
 testing larger N's and seeing if the effect is more drastic the larger the N
 as that appears to be what is happening with the relatively small data set.
+
+One of the most difficult things to parallelize is the solution of a linear 
+system of equations. Usually, the properties of the matrix being used must 
+be exploited to receive any kind of speedup or efficiency gains. Gaussian 
+elimination in particular is not very parallelizable, especially with 
+partial-pivoting. The actual act of pivoting the rows of matrices introduces 
+a sequential dependency to the process. Still, the parallelization of the 
+elementary row operations proved to be beneficial to the overal performance 
+of the method. 
+
 \section{Conclusions}
 
 While we did blah, blah, blah and blah, blah, we recognize that blah is blah. For further development, we would need to implement blah blah blah. However, with regard to the library in its current state, we are satisfied with blah and would like to continue to blah.
