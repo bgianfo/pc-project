@@ -3,8 +3,8 @@
 # Author: Brian Gianforcaro - b.gianfo@gmail.com
 #
 ############################################################
-CC = /usr/local/versions/jdk-1.5.0_15/bin/javac -Xlint:all
-EX = /usr/local/versions/jdk-1.5.0_15/bin/java
+CC = javac
+EX = java
 PJ = ../pj.jar:.
 
 default: class

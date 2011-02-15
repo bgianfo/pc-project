@@ -1,7 +1,7 @@
 import edu.rit.pj.Comm;
 
 /**
- * A program that applies Gaussian eliminati n t  compute
+ * A program that applies Gaussian elimination to compute
  * the inverse that solves the system Ax=b
  */
 public class MatrixInverse{
@@ -75,8 +75,10 @@ public class MatrixInverse{
         return x;
     }
 
-    /** 
-     * apply gaussian elimination to the matrix a
+    /**
+     * Apply gaussian elimination to the matrix a
+     *
+     * @param A - Matrix to eliminate 
      */
     public static MatrixDouble eliminate(MatrixDouble A) throws Exception {
         // Determine the number of rows of A
@@ -122,8 +124,8 @@ public class MatrixInverse{
         return A;
     }
 
-    /** 
-     * main method for testing the inversion
+    /**
+     * Main method for testing the inversion
      */
     public static void main(String args[]) throws Exception {
 
@@ -170,4 +172,4 @@ public class MatrixInverse{
                 (System.currentTimeMillis()-start)/loop + " msec" );
     }
 
-}//MatrixInverse.java
+} //MatrixInverse.java

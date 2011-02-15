@@ -14,16 +14,14 @@ public class MatrixParallelStr {
   // Create a static team to avoid allocation hit
   static ParallelTeam team = new ParallelTeam();
 
-  
+
   /** pads a matrix with 0 until it reaches the new size nbrows, nbcols
    * 
    * @param a
    * @param nbrows
    * @param nbcols
    */
-  public static MatrixInt pad( MatrixInt a, int nbrows, int nbcols ) 
-  {
-	//System.out.println("resizing from "+a.rows()+","+a.cols()+" to " +nbrows+ ","+nbcols);
+  public static MatrixInt pad( MatrixInt a, int nbrows, int nbcols ) {
     int[][] data = new int[nbrows][nbcols];
     for(int i = 0; i < a.rows(); i++ ) {
       for(int j = 0; j < a.cols(); j++ ) {
@@ -38,54 +36,43 @@ public class MatrixParallelStr {
   {
     return ((number ^ (number-1)) == (number+(number-1))) && (number != 0);
   }
-  
-  public static MatrixInt mult( MatrixInt a, MatrixInt b ) throws Exception 
-  {
-	  
-	  if ( ! a.correctDim( b ) ) {
-	      throw new RuntimeException("Multiplication of different sized matricies");
-	  }
-	  
+
+  public static MatrixInt mult( MatrixInt a, MatrixInt b ) throws Exception {
+
+    if ( ! a.correctDim( b ) ) {
+        throw new RuntimeException("Multiplication of different sized matricies");
+    }
+
     // check if the size is a power of 2 :
-	int finalrows = a.rows();
-	int finalcol = b.cols();
-	  
+  int finalrows = a.rows();
+  int finalcol = b.cols();
+
     int rows = Math.max(a.rows(),b.rows());
     int cols = Math.max(a.cols(),b.cols());
     int resizing = Math.max(rows,cols);
     // we want a and b to be 2 matrices of size the closest power of 2 of 'resizing'
-	
+
     MatrixInt result;
 
-    if ( a.equalDim(b)  && isPow2(rows) ) 
-    {
-        //System.out.println("no need to pad");
-    	result =  multRunSmp( a, b );
-
-    }
-    else
-    {
-    	if( ! isPow2(resizing) )
+    if ( a.equalDim(b)  && isPow2(rows) ) {
+      result =  multRunSmp( a, b );
+    } else {
+      if( ! isPow2(resizing) )
             resizing = (int)(Math.log((double) resizing)/Math.log(2.0f)) + 1;
 
-    	MatrixInt MatrixAnew = pad(a,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
-    	MatrixInt MatrixBnew = pad(b,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
-    	result =  multRunSmp( MatrixAnew, MatrixBnew );
+      MatrixInt MatrixAnew = pad(a,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
+      MatrixInt MatrixBnew = pad(b,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
+      result =  multRunSmp( MatrixAnew, MatrixBnew );
     }
 
-    
-    // copy the result and suppress the padded zeroes
+    // Copy the result and suppress the padded zeroes
     int data[][] = new int[finalrows][finalcol];
-    for(int i=0; i< finalrows; i++ )
-    {
-    	for(int j=0; j< finalcol; j++ )
-    	{
-    		data[i][j] = result.data[i][j];
-    	}
+    for( int i=0; i < finalrows; i++ ) {
+      for(int j=0; j< finalcol; j++ ) {
+        data[i][j] = result.data[i][j];
+      }
     }
-    
     return new MatrixInt(data);
-
   }
 
 
@@ -153,13 +140,11 @@ public class MatrixParallelStr {
     return output;
   }
 
-
-
   public static MatrixInt multRunSmp( MatrixInt a, MatrixInt b) throws Exception {
 
     int n = a.rows();
     if ( !( a.equalDim(b)) || ! (a.cols()==n ) || ! MatrixOp.isPow2(n) ) {
-      //System.out.println("matrices dimensions aren't suitable for the algorithm");
+      System.err.println("matrices dimensions aren't suitable for the algorithm");
     }
 
     if ( n <= 128 ) { // 128 seems to be the n where classic mult is more efficient (64 is still fine)
@@ -186,7 +171,6 @@ public class MatrixParallelStr {
 
     final int STEPS = 7;
     final MatrixInt[] M = new MatrixInt[STEPS];
-
 
     team.execute( new ParallelRegion() {
       public void run() throws Exception {

@@ -18,20 +18,19 @@ public class MatrixDouble {
 
     data = new double[rows][cols];
   }
-  
+
   /** return the identity matrix
    * @param size the size of a side of a matrix (identity->square matrix)
    * @return the identity matrix of size (sixe*sixe)
    */
-  public static MatrixDouble getIdentity(int size)
-  {
-	  double[][] data = new double[size][size];
-	  // should be initialized at 0 by default
-	  for(int i=0; i<size; i++)
-		  data[i][i] = 1.0f;
-	  
-	  MatrixDouble m = new MatrixDouble(data);
-	  return m;
+  public static MatrixDouble getIdentity(int size) {
+    double[][] data = new double[size][size];
+    // should be initialized at 0 by default
+    for(int i=0; i<size; i++)
+      data[i][i] = 1.0f;
+
+    MatrixDouble m = new MatrixDouble(data);
+    return m;
   }
 
   /**
@@ -142,9 +141,9 @@ public class MatrixDouble {
    */
   public boolean correctDim( MatrixDouble b)
   {
-	  return this.cols() == b.rows();
+    return this.cols() == b.rows();
   }
-  
+
   /** determine whether the dimension of the 2 matrices allows us to perform a matrix multiplication 
    * @param this the left matrix
    * @param b the right matrix
@@ -152,9 +151,9 @@ public class MatrixDouble {
    */
   public boolean correctDim( MatrixInt b)
   {
-	  return this.cols() == b.rows();
+    return this.cols() == b.rows();
   }
-  
+
   /**
    * Member function to display the current matrix on the command line.
    */

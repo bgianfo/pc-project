@@ -35,8 +35,6 @@ public class MatrixInt {
     data = new int[rows][cols];
     this.copyData( cdata );
   }
-  
-  
 
   /**
    * Matrix copy constructor
@@ -44,23 +42,22 @@ public class MatrixInt {
   private MatrixInt( final MatrixInt copy ) { 
     this( copy.data );
   }
-       
-  
+
   /** return the identity matrix
    * @param size the size of a side of a matrix (identity->square matrix)
    * @return the identity matrix of size (sixe*sixe)
    */
   public static MatrixInt getIdentity(int size)
   {
-	  int[][] data = new int[size][size];
-	  // should be initialized at 0 by default
-	  for(int i=0; i<size; i++)
-		  data[i][i] = 1; 
-	  
-	  MatrixInt m = new MatrixInt(data);
-	  return m;
+    int[][] data = new int[size][size];
+    // should be initialized at 0 by default
+    for(int i=0; i<size; i++)
+      data[i][i] = 1; 
+
+    MatrixInt m = new MatrixInt(data);
+    return m;
   }
-  
+
   /** Get the number of rows in the matrix */
   public int rows() { return rows; }
 
@@ -151,7 +148,7 @@ public class MatrixInt {
    */
   public boolean correctDim( MatrixDouble b)
   {
-	  return this.cols() == b.rows();
+    return this.cols() == b.rows();
   }
   
   /** determine whether the dimension of the 2 matrices allows us to perform a matrix multiplication 
@@ -161,7 +158,7 @@ public class MatrixInt {
    */
   public boolean correctDim( MatrixInt b)
   {
-	  return this.cols() == b.rows();
+    return this.cols() == b.rows();
   }
 
   /**
@@ -187,5 +184,5 @@ public class MatrixInt {
     MatrixInt r = MatrixInt.randomSmall( 20, 20 );
     r.display();
   }
-  
+
 }

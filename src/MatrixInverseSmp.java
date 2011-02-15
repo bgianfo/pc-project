@@ -4,7 +4,7 @@ import edu.rit.pj.ParallelTeam;
 import edu.rit.pj.IntegerForLoop;
 
 /**
- * A program that applies Gaussian eliminati n t  compute
+ * A smp program that applies Gaussian elimination to compute
  * the inverse that solves the system Ax=b
  */
 public class MatrixInverseSmp{
@@ -14,8 +14,6 @@ public class MatrixInverseSmp{
 
     // prevent construction
     private MatrixInverseSmp() { }
-
-
 
     /**
      * Solves the linear system A.x=b
@@ -185,7 +183,7 @@ public class MatrixInverseSmp{
             System.err.println(re.getMessage());
         }
         */
-        
+
         int loop = 10;
         long start = System.currentTimeMillis();
         for(int i = 0; i < loop; i++) {

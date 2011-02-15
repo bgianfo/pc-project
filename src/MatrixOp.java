@@ -70,7 +70,7 @@ public class MatrixOp {
   {
 	  if ( ! a.equalDim( b ) ) 
 	  {
-	      throw new RuntimeException("Multiplication of different sized matricies");
+	      throw new RuntimeException("Addition of different sized matricies");
 	  }
 	  int[][] data = new int[a.rows()][a.cols()];
 	  for(int i=0; i<a.rows(); i++ )
@@ -94,7 +94,7 @@ public class MatrixOp {
   {
 	  if ( ! a.equalDim( b ) ) 
 	  {
-	      throw new RuntimeException("Multiplication of different sized matricies");
+	      throw new RuntimeException("Subtraction of different sized matricies");
 	  }
 	  int[][] data = new int[a.rows()][a.cols()];
 	  for(int i=0; i<a.rows(); i++ )
@@ -280,7 +280,6 @@ public class MatrixOp {
    */
   public static MatrixInt pad( MatrixInt a, int nbrows, int nbcols ) 
   {
-	//System.out.println("resizing from "+a.rows()+","+a.cols()+" to " +nbrows+ ","+nbcols);
     int[][] data = new int[nbrows][nbcols];
     for(int i = 0; i < a.rows(); i++ ) {
       for(int j = 0; j < a.cols(); j++ ) {
@@ -299,68 +298,60 @@ public class MatrixOp {
 
   public static MatrixInt strassenMult( MatrixInt a, MatrixInt b )
   {
-	  if ( ! a.correctDim( b ) ) {
-	      throw new RuntimeException("Multiplication of different sized matricies");
-	  }
-	  
+    if ( ! a.correctDim( b ) ) {
+        throw new RuntimeException("Multiplication of different sized matricies");
+    }
+
     // check if the size is a power of 2 :
-	int finalrows = a.rows();
-	int finalcol = b.cols();
-	  
+    int finalrows = a.rows();
+    int finalcol = b.cols();
+
     int rows = Math.max(a.rows(),b.rows());
     int cols = Math.max(a.cols(),b.cols());
     int resizing = Math.max(rows,cols);
     // we want a and b to be 2 matrices of size the closest power of 2 of 'resizing'
-	
+
     MatrixInt result;
 
     if ( a.equalDim(b)  && isPow2(rows) ) 
     {
-        //System.out.println("no need to pad");
-    	result =  strassenMultRun(a, b);
-
+      result =  strassenMultRun(a, b);
     }
     else
     {
-    	if( ! isPow2(resizing) )
-            resizing = (int)(Math.log((double) resizing)/Math.log(2.0f)) + 1;
+      if( ! isPow2(resizing) )
+         resizing = (int)(Math.log((double) resizing)/Math.log(2.0f)) + 1;
 
-    	MatrixInt MatrixAnew = pad(a,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
-    	MatrixInt MatrixBnew = pad(b,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
-    	result =  strassenMultRun(MatrixAnew, MatrixBnew);
+      MatrixInt MatrixAnew = pad(a,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
+      MatrixInt MatrixBnew = pad(b,(int)Math.pow(2,resizing),(int)Math.pow(2,resizing));
+      result =  strassenMultRun(MatrixAnew, MatrixBnew);
     }
 
 
     // copy the result and suppress the padded zeroes
     int data[][] = new int[finalrows][finalcol];
-    for(int i=0; i< finalrows; i++ )
-    {
-    	for(int j=0; j< finalcol; j++ )
-    	{
-    		data[i][j] = result.data[i][j];
-    	}
+    for(int i=0; i< finalrows; i++ ) {
+      for(int j=0; j< finalcol; j++ ) {
+        data[i][j] = result.data[i][j];
+      }
     }
-    
+
     return new MatrixInt(data);
-    
+
   }
 
   public static MatrixInt strassenMultRun( MatrixInt a, MatrixInt b) {
     int n = a.rows();
-    
     // 128 seems to be the n where classic mult is more efficient (64 is still fine)
     if ( n <= 128 ) {
      return mult(a,b);
     }
-
     // Divide a and b each into 4 matrices of size (n-1)
     MatrixInt[] subMatA = new MatrixInt[4];
     MatrixInt[] subMatB = new MatrixInt[4];
 
-    for ( int i = 0; i < 2; i++ ) // rows
-    {
-      for ( int j = 0; j < 2; j++ ) // cols
-      {
+    for ( int i = 0; i < 2; i++ ) { // rows
+      for ( int j = 0; j < 2; j++ ) { // cols
         subMatA[i*2+j] = new MatrixInt(n/2,n/2);
         subMatB[i*2+j] = new MatrixInt(n/2,n/2);
         // copy the data into the submatrix :

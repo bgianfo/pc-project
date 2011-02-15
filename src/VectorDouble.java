@@ -5,6 +5,9 @@ public class VectorDouble {
     private int size;
     public double[] data;
 
+    /**
+     * Default constructor 
+     */
     public VectorDouble( int size ) {
         this.size = size;
         this.data = new double[size];
@@ -22,8 +25,8 @@ public class VectorDouble {
         this.copyData( cdata );
     }
 
-    /** 
-     * Copy the data from a given array into 
+    /**
+     * Copy the data from a given array into
      * the vector own allocated data.
      *
      * @param cdata The array to copy from
@@ -49,10 +52,16 @@ public class VectorDouble {
         return rand;
     }
 
+    /**
+     * Obtain the lenght of the vector
+     */
     public int length() {
         return  size;
     }
 
+    /**
+     * Zero out the current vector
+     */
     public void zero() {
         for ( int i = 0; i < size; i++ ) {
             this.data[i] = 0;

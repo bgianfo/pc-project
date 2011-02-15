@@ -10,10 +10,40 @@ public class VectorInt {
         this.data = new int[size];
     }
 
+    /**
+     * Data copy constructor
+     *
+     * @param cdata The data to copy
+     */
+    public VectorInt( int[] cdata ) {
+        this.size = cdata.length;
+
+        data = new int[size];
+        this.copyData( cdata );
+    }
+
+    /**
+     * Copy the data from a given array into
+     * the vector own allocated data.
+     *
+     * @param cdata The array to copy from
+     */
+    private void copyData( int[] cdata ) {
+        for ( int r = 0; r < size ; r++ ) {
+                this.data[r] = cdata[r];
+        }
+    }
+
+    /**
+     * Obtain the lenght of the vector
+     */
     public int length() {
         return  size;
     }
 
+    /**
+     * Zero out the current vector
+     */
     public void zero() {
         for ( int i = 0; i < size; i++ ) {
             this.data[i] = 0;
@@ -34,6 +64,5 @@ public class VectorInt {
         }
         return rand;
     }
-
 
 }
