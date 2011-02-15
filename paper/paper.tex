@@ -147,51 +147,94 @@ A Parallel Matrix Manipulation Library (PMML) is presented for use on sequential
 \section{Introduction}
 \subsection{Numerical Linear Algebra}
 
-The use of computers to manipulate and solve matrices has found many applications in computer science, finances, engineering, biology, and physics. Since many problems can be reduced to a system of linear equations, particularly in the solution of differential equations, numerical linear algebra has become increasingly useful in the study of such systems. In the High Performance Computing world, a large amount of effort has been devoted to developing toolsets that allow these problems to be solved in parallel.
+The use of computers to manipulate and solve matrices has found many applications in computer science, finances, engineering, biology, and physics \cite{TrefethenNLA}. Since many problems can be reduced to a system of linear equations, particularly in the solution of differential equations as seen in many examples in the Matrix Market maintained by NIST \cite{MatrixMarket}, numerical linear algebra has become increasingly useful in the study of such systems. In the High Performance Computing (HPC) world, a large amount of effort and resources have been devoted to developing toolsets that allow these problems to be solved in parallel \cite{SCALAPACK,LAPACK,PLASMA,PSBLAS}.
 
-Since its development in 1979, the {\em de facto} standard for basic linear algebra operations has been the Basic Linear Algebra Subprograms (BLAS) \cite{BLAS}. Most modern implementations of numerical linear algebra libraries still rely on this toolset written in FORTRAN90 \cite{LAPACK}, though other language implementations exist \cite{CLAPACK,JBLAS}. Early in the applications of computers to such problems, vector computers reigned supreme in numerical linear algebra due to their ability to apply operations to one-dimensional arrays of data. As scalar processors became cheaper and more readily available, a trend began of using large systems of scalar processors to perform parallel operations.
+Since its development in 1979, the {\em de facto} standard for basic linear algebra operations has been the Basic Linear Algebra Subprograms (BLAS) \cite{BLAS}. Most modern implementations of numerical linear algebra libraries still rely on this toolset written in FORTRAN90 \cite{LAPACK}, though other language implementations exist \cite{CLAPACK,JBLAS}. Early in the applications of computers to such problems, vector computers reigned supreme in numerical linear algebra due to their ability to apply operations to one-dimensional arrays of data. As scalar processors became cheaper and more readily available, a trend began of using large networks of scalar processors to perform parallel operations. This trend continues today as we see some of the largest HPCs are based off of this model \cite{Jaguar}.
+
+While there are some leaders in the pack of toolsets providing an easily accessible parallel implementation of the standard BLAS \cite{SCALAPACK,PLAPACK}, no clear winner has emerged. The PMML does not attempt to challenge these toolsets, as such a challenger would be many years in development, but serves as an educational exercise in developing basic matrix manipulation methods in parallel. 
 
 \subsection{Parallel Matrix Operations}
 
-Mention Parallel Java Library and need for Matrix Manipulation methods.
+The process of fitting more and more cores onto a single die is now leading us to consumer systems with multi-core chips. Since these systems share the symmetric multiprocessing model, these types of systems and larger SMP systems are the ideal target for the Parallel Matrix Manipulation Library (PMML). The PMML uses Parallel Java as a backbone to acheive the desired parallelism by dividing up computation in the agenda parallelism scheme.
+
+By dividing up the operations of multiplying slices of matrices among processors, a clear advantage is gained in terms of overall computation time. For the parallel version of the Strassen algorithm, the task of computing the block submatrices is divided among threads to achieve a reduced runtime. In the case of Gaussian elimination with partial-pivoting, the elementary row operations performed to reduce the matrix to row-echelon form are parallelized to achieve the desired speedup.
 
 \section{Methods}
-\subsection{Matrix-Vector Multiplication}
-
-Describe the problem of matrix-vector multiplication and introduce the terms.
 
 \subsection{Matrix-Matrix Multiplication}
 
 \subsubsection{Classic matrix multiplication}
-The following code:
+%Matrices of the form $A_{\mbox{\tiny m}\scriptscriptstyle\times\mbox{\tiny n}}$, where $m$ is the number of rows and $n$ is the number of columns.
+The Parallel Matrix Manipulation Library provides two methods for the multiplication of matrices of the form $A_{\mbox{\tiny m,n}}$, where $m$ is the number of rows and $n$ is the number of columns. The first of which is classic matrix multiplication of the form
+\begin{equation}
+\label{AB=C}
+A_{\mbox{\tiny m,n}}\cdot B_{\mbox{\tiny n,p}} = C_{\mbox{\tiny m,p}}
+\end{equation}
+where the product of an $m\times n$ matrix and a $n\times p$ matrix is an $m\times p$ matrix.
+
+In the PMML, the following code:
 \begin{verbatim}
-Matrix C = MatrixOp.mult(A,B)
-Matrix C = MatrixParallelOp.mult(A,B)
+Matrix C = MatrixOp.mult(A,B);
+Matrix C = MatrixParallelOp.mult(A,B);
 \end{verbatim}
-returns the product $C=AB$, using respectively the sequential and parallel algorithms.
+returns the product $C=AB$, using the sequential and parallel algorithms respectively. Note that the operation is valid only if the number of columns of $A$ equals the number of rows of $B$, otherwise an Exception is thrown.
 
-Note that the operation is valid only if the number of columns of $A$ equals the number of rows of $B$, otherwise an Exception is thrown.
-
-The matrix multiplication is performed by multiplying each row of $A$ by each column of $B$ \cite{MatrixMultiplication}. Sequentially, one thread performs all the operations by looping on every rows of $A$ and every columns of $B$. The complexity is in $O(m\cdot p\cdot n)$ if $A$ and $B$ are rectangular matrices of size $m\cdot p$ and $p\cdot n$ respectively. This method is easily parallelizable over several threads; each thread computing a range of rows of $A$. The complexity is then $O( \frac{m}{K}\cdot p\cdot n )$, $K$ being the number of threads used.
+The matrix multiplication is performed by multiplying each row of $A$ by each column of $B$ \cite{MatrixMultiplication}. Sequentially, one thread performs all the operations by looping on every row of $A$ and every column of $B$. The complexity is in $O(m\cdot n\cdot p)$ if $A$ and $B$ are rectangular matrices of size $m\times n$ and $n\times p$ respectively. This method is easily parallelizable over several threads; each thread computing a range of rows of $A$. The complexity is then $O( \frac{m}{K}\cdot n\cdot p )$, $K$ being the number of threads used.
 
 \subsubsection{Strassen matrix multiplication}
-The following code:
-\begin{verbatim}
-Matrix C = MatrixOp.strassenMult(A,B)
-Matrix C = MatrixParallelStr.mult(A,B)
-\end{verbatim}
-returns the product $C=AB$, using respectively the sequential and parallel versions of the Strassen algorithms.
+The Parallel Matrix Manipulation Library also provides an implementation of the Strassen algorithm, an algorithm discovered by Volker Strassen that is $O( n^{2.807})$ \cite{StrassenAlgorithm}.
 
-There is a way of multiplying two $2\times2$ matrices using only 7 multiplications instead of 8 with the classic algorithm. The Strassen algorithm takes advantage of that to multiply two matrices with a complexity of $O(n^2.807)$, providing that those matrices have the same size and are square matrices with side of size a power of 2 \cite{StrassenAlgorithm}.
-The idea consists in recursively dividing both matrices into 4 smaller square matrices, until those submatrices degenerate into numbers, that is have a size of 1, and replace the last multiplication by the sum of 18 submatrices.
+Let $A$, $B$ be two real valued square matrices of size $2^n\times2^n$ for some $n$. If they are not this size, the missing rows and columns must be filled with zeros. In order to divide the computation, $A$, $B$ and $C$ are partitioned into equally sized blocks,
+\begin{equation*}
+\label{StrassenBlocks}
+\mathbf{A} = \begin{bmatrix} \mathbf{A}_{1,1} & \mathbf{A}_{1,2} \\ \mathbf{A}_{2,1} & \mathbf{A}_{2,2} \end{bmatrix}
+\mbox { , }
+\mathbf{B} = \begin{bmatrix} \mathbf{B}_{1,1} & \mathbf{B}_{1,2} \\ \mathbf{B}_{2,1} & \mathbf{B}_{2,2} \end{bmatrix}
+\mbox { , }
+\mathbf{C} = \begin{bmatrix} \mathbf{C}_{1,1} & \mathbf{C}_{1,2} \\ \mathbf{C}_{2,1} & \mathbf{C}_{2,2} \end{bmatrix}
+\end{equation*}
+with each $\mathbf{A}_{i,j}, \mathbf{B}_{i,j}, \mathbf{C}_{i,j}$ of size $2^{n-1} \times 2^{n-1}$. With this partitioning, the matrix $C$ can be expressed as the blocks
+\begin{eqnarray*}
+\mathbf{C}_{1,1} = \mathbf{A}_{1,1}\cdot \mathbf{B}_{1,1} + \mathbf{A}_{1,2}\cdot \mathbf{B}_{2,1},\\
+\mathbf{C}_{1,2} = \mathbf{A}_{1,1}\cdot \mathbf{B}_{1,2} + \mathbf{A}_{1,2}\cdot \mathbf{B}_{2,2},\\
+\mathbf{C}_{2,1} = \mathbf{A}_{2,1}\cdot \mathbf{B}_{1,1} + \mathbf{A}_{2,2}\cdot \mathbf{B}_{2,1},\\
+\mathbf{C}_{2,2} = \mathbf{A}_{2,1}\cdot \mathbf{B}_{1,2} + \mathbf{A}_{2,2}\cdot \mathbf{B}_{2,2}.
+\end{eqnarray*}
+In the case of standard matrix multiplication, the partitioning of $C$ in this way yields a total of 8 matrix multiplications. By introducing the following matrices
+\begin{align*}
+&\mathbf{M}_{1} := (\mathbf{A}_{1,1} + \mathbf{A}_{2,2})\cdot (\mathbf{B}_{1,1} + \mathbf{B}_{2,2}),\\
+&\mathbf{M}_{2} := (\mathbf{A}_{2,1} + \mathbf{A}_{2,2})\cdot \mathbf{B}_{1,1},\\
+&\mathbf{M}_{3} := \mathbf{A}_{1,1}\cdot (\mathbf{B}_{1,2} - \mathbf{B}_{2,2}),\\
+&\mathbf{M}_{4} := \mathbf{A}_{2,2}\cdot (\mathbf{B}_{2,1} - \mathbf{B}_{1,1}),\\
+&\mathbf{M}_{5} := (\mathbf{A}_{1,1} + \mathbf{A}_{1,2})\cdot \mathbf{B}_{2,2},\\
+&\mathbf{M}_{6} := (\mathbf{A}_{2,1} - \mathbf{A}_{1,1})\cdot (\mathbf{B}_{1,1} + \mathbf{B}_{1,2}),\\
+&\mathbf{M}_{7} := (\mathbf{A}_{1,2} - \mathbf{A}_{2,2})\cdot (\mathbf{B}_{2,1} + \mathbf{B}_{2,2}).
+\end{align*}
+and then computing 
+\begin{align*}
+&\mathbf{C}_{1,1} = \mathbf{M}_{1} + \mathbf{M}_{4} - \mathbf{M}_{5} + \mathbf{M}_{7}\\
+&\mathbf{C}_{1,2} = \mathbf{M}_{3} + \mathbf{M}_{5}\\
+&\mathbf{C}_{2,1} = \mathbf{M}_{2} + \mathbf{M}_{4}\\
+&\mathbf{C}_{2,2} = \mathbf{M}_{1} - \mathbf{M}_{2} + \mathbf{M}_{3} + \mathbf{M}_{6}
+\end{align*}
+we see that the total number of matrix partition multiplications drops from $8$ to $7$. Since these matrix multiplications are more costly than matrix additions and subtractions, efficiency is gained in the computation of $C$.
 
-However, by padding with zeroes the matrices to the closest power of 2, we can multiply matrices of any size. 
+The idea consists in recursively dividing both matrices into 4 smaller square matrices, until those submatrices degenerate into numbers, that is have a size of 1, and replace the last multiplication by the sum of 18 submatrices. However, by padding with zeroes the matrices to the closest power of 2, we can multiply matrices of any size. Due to this recursive nature, this algorithm is not easily parallelizable but we managed to parallelize the first step before the recursion to obtain speedups with up to 7 threads (see results section).
 
-Due to this recursive nature, this algorithm is not easily parallelizable but we managed to parallelize the first step before the recursion to obtain speedups with up to 7 threads (see results section).
+In the PMML, the following code:
+
+{\tt Matrix C = MatrixOp.strassenMult(A,B);\\
+Matrix C = MatrixParallelStr.mult(A,B);}
+
+returns the product $C=AB$, using the sequential and parallel versions respectively of the Strassen algorithm. 
+
+\subsection{Matrix-Vector Multiplication}
+
+Describe the problem of matrix-vector multiplication and introduce the terms.
 
 \subsection{Solution to Linear Systems of Equations}
 
-Describe the solution to the linear system $Ax=b$ and backsubstitution. Describe Gaussian elimination with partial-pivoting.
+To solve a linear system of equations of the form $Ax=b$, where $A$ is an $m\times n$ matrix, $b$ is an $m\times 1$ vector, and $x$ is the $m\times 1$ solution vector, first the matrix must be inverted. For most matrices, this presents a problem, as the inverse of a matrix is generally not easy to compute and may not even exist. Gaussian elimination is the process of performing a series of elementary row operations to the matrix $A$ to reduce it to a form, known as row-echelon form, that can be easily inverted.
 
 \section{Results}
 \subsection{Matrix-Vector Multiplication}
