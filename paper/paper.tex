@@ -281,6 +281,10 @@ Compiler to activate and produce machine code for the methods
 being tested. This gives an average of the initial non-JIT timings, mixed
 with the eventual JIT-enabled timings.
 
+All timing numbers were taken by running jobs on the RIT CS department's
+paradise SMP machine. The machines stat's at the time of writing: 
+Four Sun UltraSPARC-IV dual-core CPUs, eight processors, 1.35 GHz clock, 16 GB
+main memory.
 \subsection{Matrix-Vector Multiplication}
 
 
@@ -491,6 +495,15 @@ as that appears to be what is happening with the relatively small data set.
 \section{Conclusions}
 
 While we did blah, blah, blah and blah, blah, we recognize that blah is blah. For further development, we would need to implement blah blah blah. However, with regard to the library in its current state, we are satisfied with blah and would like to continue to blah.
+
+We were able to glean interesting results from the data points we retreived.
+However the size of the matrices we could create was limited by JVM's maximum heap size.
+It may be worth wile to explore running the implementented
+algorithms on different architectures with possibly larger JVM heap upper
+bounds. Since in general we saw increased peformance by increasing the size of
+N, the point at which this is no longer true for our implementations would be a
+helpful thing to know.
+
 
 \newpage
 
