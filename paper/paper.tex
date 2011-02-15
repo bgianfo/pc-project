@@ -161,6 +161,16 @@ By dividing up the operations of multiplying slices of matrices among processors
 
 \section{Methods}
 
+\begin{verbatim}
+MatrixInt A = ...
+VectorInt B = ...
+Matrix C = MatrixOp.mult(A,B)
+Matrix C = MatrixParallelOp.mult(A,B)
+
+\end{verbatim}
+
+
+
 \subsection{Matrix-Matrix Multiplication}
 
 \subsubsection{Classic matrix multiplication}
@@ -237,6 +247,7 @@ Describe the problem of matrix-vector multiplication and introduce the terms.
 To solve a linear system of equations of the form $Ax=b$, where $A$ is an $m\times n$ matrix, $b$ is an $m\times 1$ vector, and $x$ is the $m\times 1$ solution vector, first the matrix must be inverted. For most matrices, this presents a problem, as the inverse of a matrix is generally not easy to compute and may not even exist. Gaussian elimination is the process of performing a series of elementary row operations to the matrix $A$ to reduce it to a form, known as row-echelon form, that can be easily inverted.
 
 \section{Results}
+
 \subsection{Matrix-Vector Multiplication}
 
 \begin{center}
@@ -259,6 +270,20 @@ To solve a linear system of equations of the form $Ax=b$, where $A$ is an $m\tim
 4000    & 8       &  34        & 9.941       & 1.243   & -0.029    \\\hline
 \end{tabular}
 \end{center}
+
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-vector/running-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-vector/speedup-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-vector/esdf-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-vector/eff-vs-proc.png}
+\end{center}
+
 
 \subsection{Matrix-Matrix Multiplication}
 
@@ -287,6 +312,20 @@ Sequential and Parallel Implementation
 \end{tabular}
 \end{center}
 
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel/run-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel/speedup-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel/edsf-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel/eff-vs-proc.png}
+\end{center}
+
+
 Sequential Strassen and Parallel Strassen Implementation
 \begin{center}
 \begin{tabular}{|r|r|r|r|r|r|r|}\hline
@@ -310,6 +349,19 @@ Sequential Strassen and Parallel Strassen Implementation
 100     & 7       &   68              &   1.044       & 0.149     & 1.977      \\\hline
 100     & 8       &   68              &   1.044       & 0.131     & 1.958      \\\hline
 \end{tabular}
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel-stras/running-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel-stras/speedup-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel-stras/edsf-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/parallel-stras/eff-vs-proc.png}
 \end{center}
 
 
@@ -337,6 +389,19 @@ Sequential Strassen and Parallel Strassen Implementation
 100     & 7       &  80            & 0.212        & 0.030    & 1.471     \\\hline
 100     & 8       &  101           & 0.168        & 0.021    & 1.882     \\\hline
 \end{tabular}
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-inversion/running-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-inversion/speedup-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-inversion/edsf-vs-proc.png}
+\end{center}
+\begin{center}
+\includegraphics[scale=0.5]{images/matrix-inversion/eff-vs-proc.png}
 \end{center}
 
 \section{Conclusions}

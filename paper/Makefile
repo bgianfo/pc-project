@@ -1,4 +1,4 @@
-LATEX=latex
+LATEX=pdflatex
 BIBTEX=bibtex
 CONVERT_DVI=dvipdf
 
@@ -11,8 +11,7 @@ paper: paper.tex
 	$(LATEX) paper
 	#$(BIBTEX) paper
 	$(LATEX) paper
-	$(LATEX) paper
-	$(CONVERT_DVI) paper.dvi
+	#$(CONVERT_DVI) paper.dvi
 	open paper.pdf
 
 paper-clean:
